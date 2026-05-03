@@ -1,0 +1,271 @@
+# Lecture 1 Notes — Introduction to Algorithms
+
+This is my own summary of the first MIT 6.006 lecture. I am writing it in simple words so I can actually understand and review it later.
+
+## What is this lecture about?
+
+The goal of this lecture is to understand how we think about algorithms.
+
+An algorithm is not just code. It is a step-by-step method that takes an input and gives an output. For an algorithm to be useful, it should be:
+
+1. Correct
+2. Efficient
+
+So when I study algorithms, I should always ask two questions:
+
+- Does this algorithm always give the right answer?
+- How fast is it when the input gets bigger?
+
+---
+
+## Problem
+
+A problem is the thing we are trying to solve.
+
+For example:
+
+> Given a group of students, find whether two students have the same birthday.
+
+The important point is that algorithm problems are usually not about one small example. They are about solving the problem for any input size.
+
+So instead of only asking:
+
+> Do two people in this classroom have the same birthday?
+
+We ask:
+
+> Given any number of students, can we find a matching birthday?
+
+That is what makes it a general algorithm problem.
+
+---
+
+## Algorithm
+
+An algorithm is a procedure that maps an input to one output.
+
+For the birthday problem, a simple algorithm could be:
+
+1. Start with an empty record.
+2. Go through each student one by one.
+3. Check if their birthday already exists in the record.
+4. If yes, return the two students.
+5. If no, add this student to the record.
+6. If we finish and find no match, return `None`.
+
+This algorithm is deterministic because for the same input, it always follows the same steps.
+
+---
+
+## Correctness
+
+Correctness means proving that the algorithm always returns the right answer.
+
+For small inputs, we can check all cases manually. But for large inputs, we cannot do that.
+
+That is why we use reasoning like induction.
+
+For the birthday algorithm, the idea is:
+
+- After checking the first `k` students, the record contains those students.
+- If there was already a match before, the algorithm would have found it.
+- When checking the next student, we only need to compare that student with the previous ones.
+- So if a match exists, the algorithm will find it.
+
+The main idea:
+
+> Correctness is about proving the algorithm works for every valid input, not just the examples I tested.
+
+---
+
+## Efficiency
+
+Efficiency means how fast the algorithm runs.
+
+Instead of measuring real time in seconds, we count operations. This makes the analysis less dependent on the computer.
+
+For example, if an algorithm has one loop through `n` items, we usually say it is `O(n)`.
+
+If it has a loop inside another loop, it may be `O(n²)`.
+
+The lecture introduces asymptotic notation:
+
+- `O(...)` means upper bound
+- `Ω(...)` means lower bound
+- `Θ(...)` means tight bound
+
+For now, I mostly need to remember:
+
+> Big-O describes how the runtime grows as the input size grows.
+
+---
+
+## Model of Computation: Word-RAM
+
+This part was confusing at first, but I understand it like this:
+
+The Word-RAM model is a simplified computer model used to analyze algorithms.
+
+It assumes the computer has:
+
+- Memory
+- A processor
+- Fixed-size machine words
+- Basic operations that take constant time
+
+A machine word is a fixed-size block of bits, like 32 bits or 64 bits.
+
+In this model, we assume these operations take `O(1)` time:
+
+- Adding numbers
+- Subtracting numbers
+- Comparing numbers
+- Reading from memory
+- Writing to memory
+
+This does not mean real computers are always this simple. It is just a model that helps us analyze algorithms in a clean way.
+
+The main idea:
+
+> Word-RAM is the “fake simple computer” we use so we can talk about algorithm performance without worrying about every hardware detail.
+
+---
+
+## Data Structure
+
+A data structure is a way to store data and support operations on that data.
+
+Examples:
+
+- Array
+- Linked list
+- Hash table
+- Tree
+- Heap
+
+The same data can be stored in different ways, and each way has different performance.
+
+For example, if I store students in an array, checking whether a birthday already exists may require searching through many previous students.
+
+But if I store birthdays in a hash table, checking whether a birthday exists can be much faster.
+
+So choosing the right data structure can make an algorithm much faster.
+
+---
+
+## Interface
+
+An interface is the set of operations that a data structure supports.
+
+For example, a sequence interface may support:
+
+- Get item at index
+- Set item at index
+- Insert item
+- Delete item
+
+A set interface may support:
+
+- Add item
+- Remove item
+- Check if item exists
+
+The important idea is:
+
+> Interface is what we can do. Data structure is how it is implemented.
+
+Different data structures can support the same interface but with different runtimes.
+
+---
+
+## Static Array
+
+A static array has:
+
+- Fixed size
+- Fixed-width slots
+- Fast access by index
+
+Operations:
+
+- Create array of size `n`: `Θ(n)`
+- Get item at index `i`: `Θ(1)`
+- Set item at index `i`: `Θ(1)`
+
+So arrays are good when I need fast access by index.
+
+But they are not always good for searching unless the data is organized in a helpful way.
+
+---
+
+## Birthday Match Code
+
+The lecture uses this example:
+
+```python
+def birthday_match(students):
+    n = len(students)
+    record = StaticArray(n)
+
+    for k in range(n):
+        (name1, bday1) = students[k]
+
+        for i in range(k):
+            (name2, bday2) = record.get_at(i)
+
+            if bday1 == bday2:
+                return (name1, name2)
+
+        record.set_at(k, (name1, bday1))
+
+    return None
+```
+
+The outer loop runs `n` times.
+
+The inner loop runs:
+
+- 0 times for the first student
+- 1 time for the second student
+- 2 times for the third student
+- ...
+- `n - 1` times for the last student
+
+So the total work is roughly:
+
+```text
+0 + 1 + 2 + ... + (n - 1)
+```
+
+That becomes `O(n²)`.
+
+So this version works, but it is not the best possible version.
+
+---
+
+## Main Takeaways
+
+My main takeaways from this lecture:
+
+1. An algorithm is a step-by-step method for solving a problem.
+2. A correct algorithm must work for every valid input.
+3. Efficiency is about how runtime grows as input size grows.
+4. Word-RAM is a simplified model of a computer.
+5. A data structure stores data and supports operations.
+6. An interface describes what operations are available.
+7. The right data structure can improve the algorithm a lot.
+8. The birthday match algorithm with a static array is `O(n²)`.
+
+---
+
+## Things I Should Practice
+
+Related LeetCode practice:
+
+- Two Sum
+- Contains Duplicate
+- Valid Anagram
+- Intersection of Two Arrays
+- First Unique Character in a String
+
+These problems are good because they help me practice arrays, hash tables, sets, and runtime analysis.
