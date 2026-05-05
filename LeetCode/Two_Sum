@@ -1,0 +1,59 @@
+from typing import List
+
+class Solution:
+    """
+    Two Sum (LeetCode)
+
+    Goal:
+    Given a list of integers `nums` and an integer `target`,
+    return the indices of the two numbers such that they add up to `target`.
+
+    Approach (this version):
+    - Iterate through each element.
+    - For each number, compute the complement (target - current number).
+    - Check if the complement exists in the remaining part of the list.
+    - If found, return the pair of indices.
+
+    Notes:
+    - This solution uses slicing and linear search, so it is not optimal.
+
+    Time Complexity:
+    - O(n^2) due to nested search (slice + membership check + index lookup)
+
+    Space Complexity:
+    - O(n) because slicing creates a new list each iteration
+    """
+
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # Loop through each index in the list
+        for i in range(len(nums)):
+            # Compute the value we need to find
+            matching_value = target - nums[i]
+
+            # Check if the matching value exists in the rest of the list
+            # nums[i+1:] creates a new list (slice)
+            if matching_value in nums[i+1:]:
+                # Find the index of the matching value starting from i+1
+                return [i, nums.index(matching_value, i + 1)]
+
+        # If no pair is found
+        return "Not Found"
+
+
+    def twoSum2(self, nums: List[int], target: int) -> List[int]:
+       
+        """
+        Same idea as before, but avoids slicing to reduce space usage.
+    
+        Time: O(n^2)
+        Space: O(1)
+        """
+        for i in range(len(nums)):
+            matching_value = target - nums[i]
+
+            # Instead of slicing, loop manually
+            for j in range(i + 1, len(nums)):
+                if nums[j] == matching_value:
+                    return [i, j]
+
+        return "Not Found"

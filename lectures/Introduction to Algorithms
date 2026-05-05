@@ -82,22 +82,105 @@ The main idea:
 
 Efficiency means how fast the algorithm runs.
 
-Instead of measuring real time in seconds, we count operations. This makes the analysis less dependent on the computer.
+Instead of measuring time in seconds, we count how many operations the algorithm does.
 
-For example, if an algorithm has one loop through `n` items, we usually say it is `O(n)`.
+Reason:
+Different computers have different speeds, so time in seconds is not reliable.  
+We care about how the runtime **grows when input size (n) increases**.
 
-If it has a loop inside another loop, it may be `O(n²)`.
+---
 
-The lecture introduces asymptotic notation:
+### Common Time Complexities
 
-- `O(...)` means upper bound
-- `Ω(...)` means lower bound
-- `Θ(...)` means tight bound
+- **O(1)** → constant  
+  Always the same time, no matter how big input is  
 
-For now, I mostly need to remember:
+- **O(log n)** → logarithmic  
+  Grows very slowly (very efficient)
 
-> Big-O describes how the runtime grows as the input size grows.
+- **O(n)** → linear  
+  Grows directly with input size  
 
+- **O(n log n)** → log-linear  
+  Common in good sorting algorithms  
+
+- **O(n²)** → quadratic  
+  Gets slow quickly when n increases  
+
+- **O(2ⁿ)** → exponential  
+  Very slow, becomes impossible fast  
+
+---
+
+### What does “polynomial time” mean?
+
+Polynomial time means the runtime looks like:
+
+- O(n)
+- O(n²)
+- O(n³)
+- O(n^k)
+
+Basically:
+> n raised to some constant power
+
+These are considered **efficient (good)** in most cases.
+
+---
+
+### Why polynomial is good
+
+Because it scales much better than exponential.
+
+Example:
+
+If n = 1000:
+
+- O(n) → 1,000 operations  
+- O(n²) → 1,000,000 operations  
+- O(2ⁿ) → insanely large (not practical at all)
+
+So even though O(n²) is slower than O(n), it’s still manageable compared to exponential.
+
+---
+
+### Growth comparison (important intuition)
+
+As n gets bigger:
+
+- O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ)
+
+👉 The ones on the left are faster  
+👉 The ones on the right get slow very quickly  
+
+---
+
+### Key idea
+
+When comparing algorithms:
+
+- We ignore constants (like 2n vs n)
+- We ignore small terms (like n + 5)
+
+We only care about the **dominant term**
+
+Example:
+- 2n + 10 → O(n)
+- n² + n → O(n²)
+
+---
+
+### Back to birthday problem
+
+The birthday algorithm we saw:
+
+- Outer loop → n
+- Inner loop → up to n
+
+So total:
+→ O(n²)
+
+That’s why it becomes slow for large inputs.
 ---
 
 ## Model of Computation: Word-RAM
@@ -202,6 +285,8 @@ But they are not always good for searching unless the data is organized in a hel
 
 The lecture uses this example:
 
+> **Note:** `StaticArray` here represents a fixed-size array data structure, similar to a basic array in languages like C or Java. In Python, you can use a regular list for this purpose.
+
 ```python
 def birthday_match(students):
     n = len(students)
@@ -255,17 +340,3 @@ My main takeaways from this lecture:
 6. An interface describes what operations are available.
 7. The right data structure can improve the algorithm a lot.
 8. The birthday match algorithm with a static array is `O(n²)`.
-
----
-
-## Things I Should Practice
-
-Related LeetCode practice:
-
-- Two Sum
-- Contains Duplicate
-- Valid Anagram
-- Intersection of Two Arrays
-- First Unique Character in a String
-
-These problems are good because they help me practice arrays, hash tables, sets, and runtime analysis.
