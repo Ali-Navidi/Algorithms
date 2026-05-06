@@ -1,0 +1,25 @@
+class Solution:
+    def groupAnagrams(self, strs):
+        actual_result = []
+        for i in range(len(strs)):
+            result = [strs[i]]
+            already_grouped = False
+            for groups in actual_result:
+                if result[0] in groups:
+                    already_grouped = True
+            if not already_grouped:
+                for j in range(i+1, len(strs)):
+                    if len(strs[i]) != len(strs[j]):
+                        continue
+                    is_anagram = True
+                    for char in set(strs[i]):
+                        if strs[i].count(char) != strs[j].count(char):
+                            is_anagram = False
+                            break
+                    if is_anagram:
+                        result.append(strs[j])       
+                actual_result.append(result)
+        print(actual_result)
+        return actual_result
+a = Solution()
+a.groupAnagrams(["eat","tea","tan","ate","nat","bat"])
